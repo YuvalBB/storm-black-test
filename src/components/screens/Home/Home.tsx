@@ -37,8 +37,8 @@ export default function Home() {
                 Welcome to the <strong>Storm Black React Test.</strong>
             </Typography>
             <NavLink to='/subscribe' className={classes.navLink}>
-                <Fab variant="extended" aria-label="delete" className={classes.fab}>
-                    <ArrowForwardRoundedIcon/>
+                <Fab variant="extended" aria-label="go-to-subscribe" className={classes.fab}>
+                    <ArrowForwardRoundedIcon className={classes.extendedIcon}/>
                     <span>Go to subscription page</span>
                 </Fab>
             </NavLink>
