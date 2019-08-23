@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
 export default function Home() {
+    useEffect(() => {
+        document.title = 'Home';
+    }, []);
     return (
         <Container maxWidth="lg">
             <Typography variant="h4" gutterBottom>
