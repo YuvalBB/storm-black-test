@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import './IframeModal.css';
 import NewFrame from '../NewFrame/NewFrame';
 import Frame from "../Frame/Frame";
-
+import Button from "@material-ui/core/Button";
+import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import NoSsr from '@material-ui/core/NoSsr';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -11,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
+import {NavLink} from "react-router-dom";
 
 
 const useStyles = makeStyles(theme => ({
@@ -193,6 +195,15 @@ export default function UVModal() {
                                 </MenuItem>
                             )))}
                         </Select>
+                    </FormControl>
+
+                    <FormControl style={{display: 'flex', justifyContent: 'center'}}>
+                        <NavLink to='/home' className={classes.navbarLink}>
+                            <Button variant="contained" color="primary" className={classes.button}>
+                                <span>Submit</span>
+                                <SendRoundedIcon/>
+                            </Button>
+                        </NavLink>
                     </FormControl>
                 </div>
             </Frame>
