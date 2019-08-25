@@ -16,6 +16,7 @@ Known Issues [== things I didn't have time to deal with]:
         - Therefore, used (https://github.com/YuvalBB/storm-black-test/blob/master/src/components/SelectedChipsNoAggregate/SelectedChips.tsx) instead, with no aggregation.
     - Not fully TypeScript
     - Messy styling / stylesheets
+    - Could be more pretty ;)
 ```
 
 by Yuval Babayoff
