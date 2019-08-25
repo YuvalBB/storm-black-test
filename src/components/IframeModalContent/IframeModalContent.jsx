@@ -26,7 +26,6 @@ export default function IframeModalContent() {
     return (
         <Frame className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
             <StormBlackSelect options={names} setSelectedItems={setSelectedItems.bind(this)}/>
-
             <FormControl className={`${classes.formControl} submit-btn-container`}>
                 <Link to='/home' className={classes.navbarLink}>
                     <Button onClick={saveSelectedItem} variant="contained" color="primary" className={classes.button}>

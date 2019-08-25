@@ -33,7 +33,10 @@ export default function Home() {
         <Container maxWidth="lg">
             {
                 selectedItems.length > 0 ? <Typography variant="h5" gutterBottom>
-                        User had subscribed to: {selectedItems.map((item: any) => <h5>{item.name}</h5>)}
+                        User had subscribed to:
+                        <ul>
+                            {selectedItems.map((item: any) => <li key={item.key}>{item.name}</li>)}
+                        </ul>
                     </Typography> :
                     <div>
                         <Typography variant="h4" gutterBottom>
