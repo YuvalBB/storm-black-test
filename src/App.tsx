@@ -1,9 +1,8 @@
 import React from 'react';
 import Navbar from './components/Navbar/Navbar';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from './components/screens/Home/Home';
 import Subscribe from './components/screens/Subscribe/Subscribe';
-
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import './App.css';
 
 const App: React.FC = () => {
