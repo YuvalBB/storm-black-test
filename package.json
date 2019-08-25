@@ -14,7 +14,6 @@
     "immutable": "^4.0.0-rc.12",
     "jquery": "^3.4.1",
     "jss": "latest",
-    "lodash.filter": "^4.6.0",
     "lodash.find": "^4.6.0",
     "lodash.findindex": "^4.6.0",
     "lodsah": "^0.0.1-security",

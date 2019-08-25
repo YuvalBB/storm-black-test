@@ -3,7 +3,6 @@ import './IframeModal.css';
 import Frame from "../Frame/Frame";
 import Button from "@material-ui/core/Button";
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
-import NoSsr from '@material-ui/core/NoSsr';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -13,7 +12,6 @@ import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import {Link} from "react-router-dom";
 import uuid from 'uuid';
-import filter from 'lodash.filter';
 import find from 'lodash.find';
 import findIndex from 'lodash.findindex';
 
@@ -79,8 +77,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-let newOption = {key: uuid.v4(), name: ''};
-
+let newItemFromInput = {key: uuid.v4(), name: ''};
 let names = [
     {key: 0, name: ''}, // Empty slot for new input from filter
     {key: 1, name: 'Oliver Hansen'},
@@ -121,23 +118,19 @@ export default function UVModal() {
         setSelectedItems(e.target.value);
     }
 
-    function addNewOption() {
-
-    }
-
     function saveSelectedItem() {
         localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
     }
 
-    function setNewOption(value) {
-        const indexInNames = findIndexByKey(names, newOption.key);
-        const indexInSelected = findIndexByKey(selectedItems, newOption.key);
+    function setNewItemFromInput(value) {
+        const indexInNames = findIndexByKey(names, newItemFromInput.key);
+        const indexInSelected = findIndexByKey(selectedItems, newItemFromInput.key);
 
         if (indexInNames > -1 && indexInSelected === -1) {
             names[indexInNames].name = value;
         } else {
-            newOption = {key: uuid.v4(), name: value};
-            names.unshift(newOption);
+            newItemFromInput = {key: uuid.v4(), name: value};
+            names.unshift(newItemFromInput);
         }
     }
 
@@ -163,77 +156,67 @@ export default function UVModal() {
         return query ? array.filter(item => eval('/' + query + '/').test(item.name)) : array;
     }
 
+    function blockEvent(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function handleInputChange(e) {
+        blockEvent(e);
+        setFilterValue(e.target.value);
+        setNewItemFromInput(e.target.value);
+    }
+
+    function handleInputKeyDown(e) {
+        if (e.keyCode === 13) {
+            addToSelectedItems(newItemFromInput.key);
+        }
+        e.stopPropagation();
+    }
+
     return (
-        <NoSsr>
-            <Frame id="open-modal" className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
-                <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="select-multiple-chip">Please Select Names:</InputLabel>
-                    <Select
-                        multiple
+        <Frame id="open-modal" className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
+            <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="select-multiple-chip">Please Select Names:</InputLabel>
+                <Select multiple
                         className={classes.specialSelect}
                         value={selectedItems}
                         onChange={handleChange}
-                        input={
-                            <Input id="select-multiple-chip"/>
-                        }
+                        input={<Input id="select-multiple-chip"/>}
                         renderValue={
                             selected => (
                                 <div className={classes.chips}>
-                                    {
-                                        selected.map((value, index) => (
-                                            <Chip key={value.key} label={value.name} clickable={true}
-                                                  className={classes.chip}
-                                                  onDelete={() => {
-                                                      deleteFromSelectedItems(value.key);
-                                                  }}/>))
-                                    }
-                                </div>
-                            )
-                        }>
-                        {[(
-                            <div key="input-container">
-                                <input
-                                    className="select-filter-input"
-                                    value={filterValue}
-                                    placeholder="Filter"
-                                    onChange={e => {
-                                        setFilterValue(e.target.value);
-                                        setNewOption(e.target.value);
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                    }}
-                                    onClick={e => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                    }}
-                                    onKeyDown={e => {
-                                        if (e.keyCode === 13) {
-                                            addToSelectedItems(newOption.key);
-                                        }
-                                        e.stopPropagation();
-                                    }}
-                                />
-                            </div>
-                        )].concat(filterHelper(names, filterValue).map(item => (
+                                    {selected.map(value => (
+                                        <Chip key={value.key} label={value.name}
+                                              clickable={true} className={classes.chip}
+                                              onDelete={() => deleteFromSelectedItems(value.key)}/>))}
+                                </div>)}>
+                    {[(
+                        <div key="input-container">
+                            <input className="select-filter-input"
+                                   value={filterValue}
+                                   placeholder="Filter"
+                                   onChange={handleInputChange}
+                                   onClick={blockEvent}
+                                   onKeyDown={handleInputKeyDown}/>
+                        </div>)]
+                        .concat(filterHelper(names, filterValue).map(item => (
                             item.name ?
-                                <MenuItem key={item.key} value={item}
-                                          style={getStyles(item, selectedItems, theme)}>
+                                <MenuItem key={item.key} value={item} style={getStyles(item, selectedItems, theme)}>
                                     <span>{item.name}</span>
                                 </MenuItem> : null
                         )))}
-                    </Select>
-                </FormControl>
+                </Select>
+            </FormControl>
 
-                <FormControl className={classes.flexCenter}>
-                    <Link to='/home' className={classes.navbarLink}>
-                        <Button onClick={saveSelectedItem} variant="contained" color="primary"
-                                className={classes.button}>
-                            <span>Submit</span>
-                            <SendRoundedIcon/>
-                        </Button>
-                    </Link>
-                </FormControl>
-            </Frame>
-        </NoSsr>
+            <FormControl className={classes.flexCenter}>
+                <Link to='/home' className={classes.navbarLink}>
+                    <Button onClick={saveSelectedItem} variant="contained" color="primary" className={classes.button}>
+                        <span>Submit</span>
+                        <SendRoundedIcon/>
+                    </Button>
+                </Link>
+            </FormControl>
+        </Frame>
     );
 }
