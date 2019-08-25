@@ -1,4 +1,5 @@
 import {makeStyles} from "@material-ui/core";
+import find from 'lodash.find';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -65,4 +66,16 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default useStyles;
+const getStyles = (item, selectedItems, theme) => {
+    return {
+        fontWeight:
+            find(selectedItems, {name: item.name})
+                ? theme.typography.fontWeightMedium
+                : theme.typography.fontWeightRegular,
+        width: '50%',
+        padding: '5px 0',
+        borderBottom: '1px solid #ccc'
+    };
+};
+
+export {useStyles as useStyles, getStyles as getStyles};

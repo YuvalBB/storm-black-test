@@ -4,11 +4,8 @@ import map from 'lodash.map';
 import findIndex from 'lodash.findindex';
 // @ts-ignore
 import sumBy from 'lodash.sumby';
-import find from 'lodash.find';
 // @ts-ignore
 import uuid from 'uuid';
-import {render} from 'react-dom';
-import {number} from 'prop-types';
 // @ts-ignore
 let selectedChipsArr: [{ id: string, width: number }] = [];
 
