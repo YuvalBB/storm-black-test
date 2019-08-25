@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 // @ts-ignore
 export default function Home() {
     const classes = useStyles();
-    const selectedItems = localStorage.getItem('selectedItems');
+    const selectedItems = JSON.parse(localStorage.getItem('selectedItems') as string);
 
     useEffect(() => {
         document.title = 'Home';
@@ -33,7 +33,7 @@ export default function Home() {
         <Container maxWidth="lg">
             {
                 selectedItems ? <Typography variant="h5" gutterBottom>
-                        User had subsribed to: {selectedItems}
+                        User had subscribed to: {selectedItems.map((item: any) => <h6>{item.name}</h6>)}
                     </Typography> :
                     <div>
                         <Typography variant="h4" gutterBottom>

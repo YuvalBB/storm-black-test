@@ -13,6 +13,9 @@ import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import {Link} from "react-router-dom";
 import uuid from 'uuid';
+import filter from 'lodash.filter';
+import find from 'lodash.find';
+import findIndex from 'lodash.findindex';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -62,6 +65,9 @@ const useStyles = makeStyles(theme => ({
         border: '1px solid #c1c1c1',
         '& div.MuiSelect-root': {
             flex: 1
+        },
+        '& div.MuiSelect-root:hover': {
+            cursor: 'pointer'
         }
     },
     flexCenter: {
@@ -73,17 +79,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const MenuProps = {
-    PaperProps: {
-        style: {
-            '& ul': {
-                color: 'red'
-            }
-        },
-    }
-};
-
 let names = [
+    {key: 0, name: ''}, // Empty slot for new input from filter
     {key: 1, name: 'Oliver Hansen'},
     {key: 2, name: 'Van Henry'},
     {key: 3, name: 'April Tucker'},
@@ -99,54 +96,58 @@ let names = [
 function getStyles(item, selectedItems, theme) {
     return {
         fontWeight:
-            selectedItems.indexOf(item.name) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
+            find(selectedItems, {name: item.name})
+                ? theme.typography.fontWeightMedium
+                : theme.typography.fontWeightRegular,
         width: '50%',
         padding: '5px 0',
         borderBottom: '1px solid #ccc'
     };
 }
 
+let newOption = {key: uuid.v4(), name: ''};
+
 export default function UVModal() {
     const theme = useTheme();
     const classes = useStyles();
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedItems, setSelectedItems] = React.useState([]);
+    const INITIAL_CONTENT = `<!DOCTYPE html><html><head>${document.head.innerHTML}</head><body><div></div></body></html>`;
 
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
 
-    let newOption = getInitNewOption(); // from the filter input
-
-    function getInitNewOption() {
-        return {key: uuid.v4(), name: ''};
-    }
-
     function handleChange(e) {
-        console.log(e.target.value);
         setSelectedItems(e.target.value);
     }
 
     function saveSelectedItem() {
-        localStorage.setItem('selectedItems', selectedItems);
+        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
     }
 
     function setNewOption(value) {
-        names.find(item => item.key = newOption.key).name = value;
+        const indexInNames = findIndexByKey(names, newOption.key);
+        const indexInSelected = findIndexByKey(selectedItems, newOption.key);
+
+        if (indexInNames > -1 && indexInSelected === -1) {
+            names[indexInNames].name = value;
+        } else {
+            newOption = {key: uuid.v4(), name: value};
+            names.unshift(newOption);
+        }
+    }
+
+    function findIndexByKey(array, key) {
+        return findIndex(array, item => item.key === key)
     }
 
     function filterHelper(array, query) {
-        return query ? array.filter(item => {
-            return eval('/' + query + '/').test(item.name);
-        }) : array;
+        return query ? array.filter(item => eval('/' + query + '/').test(item.name)) : array;
     }
-
-    const initialContent = `<!DOCTYPE html><html><head>${document.head.innerHTML}</head><body><div></div></body></html>`;
 
     return (
         <NoSsr>
-            <Frame id="open-modal" className="modal-window iframe-modal" initialContent={initialContent}>
+            <Frame id="open-modal" className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="select-multiple-chip">Please Select Names:</InputLabel>
                     <Select
@@ -162,22 +163,13 @@ export default function UVModal() {
                                 <div className={classes.chips}>
                                     {
                                         selected.map((value, index) => (
-                                            <Chip key={value} label={value} className={classes.chip}/>))
+                                            <Chip key={value.key} label={value.name} className={classes.chip}/>))
                                     }
                                 </div>
                             )
-                        }
-                        MenuProps={MenuProps}>
+                        }>
                         {[(
-                            <div role="nothing" key="input-container"
-                                 onClick={e => {
-                                     e.preventDefault();
-                                     e.stopPropagation();
-                                 }}
-                                 onChange={e => {
-                                     e.preventDefault();
-                                     e.stopPropagation();
-                                 }}>
+                            <div key="input-container">
                                 <input
                                     className="select-filter-input"
                                     value={filterValue}
@@ -194,10 +186,10 @@ export default function UVModal() {
                                     }}
                                     onKeyDown={e => {
                                         if (e.keyCode === 13) {
-                                            selectedItems.push(e.target.value);
+                                            const newTemp = {name: e.target.value, key: uuid.v4()};
+                                            selectedItems.push(newTemp);
                                             setSelectedItems(selectedItems);
-                                            names.unshift(newOption);
-                                            newOption = getInitNewOption();
+                                            names.unshift(newTemp);
                                             forceUpdate();
                                         }
                                         e.stopPropagation();
@@ -206,7 +198,7 @@ export default function UVModal() {
                             </div>
                         )].concat(filterHelper(names, filterValue).map(item => (
                             item.name ?
-                                <MenuItem key={item.key} value={item.name}
+                                <MenuItem key={item.key} value={item}
                                           style={getStyles(item, selectedItems, theme)}>
                                     <span>{item.name}</span>
                                 </MenuItem> : null
