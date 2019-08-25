@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './IframeModal.css';
-import NewFrame from '../NewFrame/NewFrame';
 import Frame from "../Frame/Frame";
 import Button from "@material-ui/core/Button";
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
@@ -13,7 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import {Link} from "react-router-dom";
-
+import uuid from 'uuid';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -94,13 +93,13 @@ let names = [
     {key: 7, name: 'Miriam Wagner'},
     {key: 8, name: 'Bradley Wilkerson'},
     {key: 9, name: 'Virginia Andrews'},
-    {key: 10, name: 'Kelly Snyder'}
+    {key: 10, name: 'Kelly Snyder'},
 ];
 
-function getStyles(name, selectedItems, theme) {
+function getStyles(item, selectedItems, theme) {
     return {
         fontWeight:
-            selectedItems.indexOf(name) === -1
+            selectedItems.indexOf(item.name) === -1
                 ? theme.typography.fontWeightRegular
                 : theme.typography.fontWeightMedium,
         width: '50%',
@@ -115,23 +114,26 @@ export default function UVModal() {
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedItems, setSelectedItems] = React.useState([]);
 
-    function handleChange(event) {
-        setSelectedItems(event.target.value);
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
+
+    let newOption = getInitNewOption(); // from the filter input
+
+    function getInitNewOption() {
+        return {key: uuid.v4(), name: ''};
+    }
+
+    function handleChange(e) {
+        console.log(e.target.value);
+        setSelectedItems(e.target.value);
     }
 
     function saveSelectedItem() {
         localStorage.setItem('selectedItems', selectedItems);
     }
 
-    function handleChangeMultiple(event) {
-        const {options} = event.target;
-        const value = [];
-        for (let i = 0, l = options.length; i < l; i += 1) {
-            if (options[i].selected) {
-                value.push(options[i].value);
-            }
-        }
-        setSelectedItems(value);
+    function setNewOption(value) {
+        names.find(item => item.key = newOption.key).name = value;
     }
 
     function filterHelper(array, query) {
@@ -167,42 +169,53 @@ export default function UVModal() {
                         }
                         MenuProps={MenuProps}>
                         {[(
-                            <div key="input-container">
+                            <div role="nothing" key="input-container"
+                                 onClick={e => {
+                                     e.preventDefault();
+                                     e.stopPropagation();
+                                 }}
+                                 onChange={e => {
+                                     e.preventDefault();
+                                     e.stopPropagation();
+                                 }}>
                                 <input
                                     className="select-filter-input"
                                     value={filterValue}
                                     placeholder="Filter"
                                     onChange={e => {
                                         setFilterValue(e.target.value);
+                                        setNewOption(e.target.value);
                                         e.preventDefault();
                                         e.stopPropagation();
                                     }}
-                                    onClick={
-                                        e => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                        }
-                                    }
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
                                     onKeyDown={e => {
+                                        if (e.keyCode === 13) {
+                                            selectedItems.push(e.target.value);
+                                            setSelectedItems(selectedItems);
+                                            names.unshift(newOption);
+                                            newOption = getInitNewOption();
+                                            forceUpdate();
+                                        }
                                         e.stopPropagation();
                                     }}
                                 />
                             </div>
                         )].concat(filterHelper(names, filterValue).map(item => (
-                            <MenuItem key={item.key} value={item.name}
-                                      style={getStyles(item.name, selectedItems, theme)}>
-                                {item.name}
-                            </MenuItem>
+                            item.name ?
+                                <MenuItem key={item.key} value={item.name}
+                                          style={getStyles(item, selectedItems, theme)}>
+                                    <span>{item.name}</span>
+                                </MenuItem> : null
                         )))}
                     </Select>
                 </FormControl>
 
                 <FormControl className={classes.flexCenter}>
-                    <Link to={{
-                        pathname: '/home', selectedProps: {
-                            selectedItems: 'name'
-                        }
-                    }} className={classes.navbarLink}>
+                    <Link to='/home' className={classes.navbarLink}>
                         <Button onClick={saveSelectedItem} variant="contained" color="primary"
                                 className={classes.button}>
                             <span>Submit</span>

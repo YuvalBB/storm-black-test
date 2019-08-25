@@ -65,7 +65,8 @@ div[role="presentation"] {
 
 ul.MuiList-root {
     padding: 0;
-    border: 1px solid #263238;
+    border-radius: 1px;
+    border: 1px solid #ccc;
 }
 
 .MuiPaper-root.MuiMenu-paper {
@@ -82,16 +83,13 @@ ul.MuiList-root > li:hover {
 ul.MuiList-root.MuiMenu-list > div {
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid #ccc;
 }
 
 input.select-filter-input {
-    height: 20px;
-    padding: 5px;
-    margin: 10px;
-    border-radius: 5px;
-}
-
-#open-modal html,
-#open-modal body {
-    height: 100%;
+    border: 0;
+    height: 25px;
+    font-size: 16px;
+    padding: 5px 10px;
+    background-color: #cccccc59;
 }
