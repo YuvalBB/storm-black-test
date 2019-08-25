@@ -14,6 +14,7 @@ import {Link} from "react-router-dom";
 import uuid from 'uuid';
 import find from 'lodash.find';
 import findIndex from 'lodash.findindex';
+import $ from 'jquery';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -114,10 +115,6 @@ export default function UVModal() {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
 
-    function handleChange(e) {
-        setSelectedItems(e.target.value);
-    }
-
     function saveSelectedItem() {
         localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
     }
@@ -161,6 +158,10 @@ export default function UVModal() {
         e.stopPropagation();
     }
 
+    function handleSelectChange(e) {
+        setSelectedItems(e.target.value);
+    }
+
     function handleInputChange(e) {
         blockEvent(e);
         setFilterValue(e.target.value);
@@ -174,18 +175,28 @@ export default function UVModal() {
         e.stopPropagation();
     }
 
+    function checkTotalChipsSizes() {
+        const chipsContainer = $('.chips-container');
+        const chipsContainerWidth = chipsContainer.offsetWidth;
+        const chipElements = chipsContainer.children;
+        let chipsWidthSum = 0;
+        chipElements.forEach(chip => chipsWidthSum += chip.offsetWidth);
+
+        console.log(chipsWidthSum > chipsContainerWidth);
+    }
+
     return (
-        <Frame id="open-modal" className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
+        <Frame className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
             <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="select-multiple-chip">Please Select Names:</InputLabel>
                 <Select multiple
                         className={classes.specialSelect}
                         value={selectedItems}
-                        onChange={handleChange}
+                        onChange={handleSelectChange}
                         input={<Input id="select-multiple-chip"/>}
                         renderValue={
                             selected => (
-                                <div className={classes.chips}>
+                                <div className={classes.chips + ' chips-container'}>
                                     {selected.map(value => (
                                         <Chip key={value.key} label={value.name}
                                               clickable={true} className={classes.chip}
