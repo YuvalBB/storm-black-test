@@ -1,5 +1,4 @@
 const names = [
-    {key: 0, name: ''}, // Empty slot for new input from filter
     {key: 1, name: 'Oliver Hansen'},
     {key: 2, name: 'Van Henry'},
     {key: 3, name: 'April Tucker'},
