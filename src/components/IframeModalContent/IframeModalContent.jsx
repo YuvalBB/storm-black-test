@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import {useStyles} from "./IframeModalContentMaterialStyles";
 import names from "./MockData";
 import StormBlackSelect from "../StormBlackSelect/StormBlackSelect";
+import SUBSCRIPTIONS_LOCALSTORAGE_KEY from '../../constants/constants';
 
 export default function IframeModalContent() {
     const classes = useStyles();
@@ -20,7 +21,7 @@ export default function IframeModalContent() {
     <IframeModalContent/></body></html>`;
 
     function saveSelectedItem() {
-        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+        localStorage.setItem(SUBSCRIPTIONS_LOCALSTORAGE_KEY, JSON.stringify(selectedItems));
     }
 
     return (
