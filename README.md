@@ -1,6 +1,14 @@
 # storm-black-test
 Storm Black React Test
 
-by Yuval Babayoff
+```
+Installation:
 
-contact: yuvalbabayoff@gmail.com
+clone git rep
+npm install / yarn install
+npm start / yarn start
+```
+
+
+by Yuval Babayoff
+contact: (yuvalbabayoff@gmail.com)
