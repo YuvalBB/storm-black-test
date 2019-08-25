@@ -137,6 +137,13 @@ export default function UVModal() {
         }
     }
 
+    function deleteFromSelected(key) {
+        const index = findIndexByKey(selectedItems, key);
+        selectedItems.splice(index, 1);
+        setSelectedItems(selectedItems);
+        forceUpdate();
+    }
+
     function findIndexByKey(array, key) {
         return findIndex(array, item => item.key === key)
     }
@@ -163,7 +170,11 @@ export default function UVModal() {
                                 <div className={classes.chips}>
                                     {
                                         selected.map((value, index) => (
-                                            <Chip key={value.key} label={value.name} className={classes.chip}/>))
+                                            <Chip key={value.key} label={value.name} clickable={true}
+                                                  className={classes.chip}
+                                                  onDelete={() => {
+                                                      deleteFromSelected(value.key);
+                                                  }}/>))
                                     }
                                 </div>
                             )
