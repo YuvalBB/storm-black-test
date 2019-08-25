@@ -1,0 +1,11 @@
+.selected-chips-container > .MuiChip-root {
+    margin: 5px;
+}
+
+.selected-chips-container > .MuiChip-root > .MuiChip-label {
+    margin-right: 5px;
+}
+
+.selected-chips-container > .MuiChip-root > .MuiChip-deleteIcon:hover {
+    cursor: pointer;
+}

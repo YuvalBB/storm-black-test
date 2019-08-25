@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import Fab from '@material-ui/core/Fab';
 import Container from '@material-ui/core/Container';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 import {NavLink} from 'react-router-dom';
 import SubscriptionInfo from './SubscriptionInfo/SubscriptionInfo';

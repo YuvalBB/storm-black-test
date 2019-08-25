@@ -15,10 +15,7 @@ export default function IframeModalContent() {
     const [selectedItems, setSelectedItems] = React.useState([]);
 
     // Dirty workaround I made in order to load app stylesheets into the iframe :(
-    const INITIAL_CONTENT = `<!DOCTYPE html>
-    <html class="iframe-full-dimensions"><head>${document.head.innerHTML}</head>
-    <body class="iframe-full-dimensions iframe-body">
-    <IframeModalContent/></body></html>`;
+    const INITIAL_CONTENT = `<!DOCTYPE html><html class="iframe-full-dimensions"><head>${document.head.innerHTML}</head><body class="iframe-full-dimensions iframe-body"><IframeModalContent/></body></html>`;
 
     function saveSelectedItem() {
         localStorage.setItem(SUBSCRIPTIONS_LOCALSTORAGE_KEY, JSON.stringify(selectedItems));

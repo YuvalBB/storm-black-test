@@ -1,5 +1,6 @@
 import React from 'react';
 import map from 'lodash.map';
+import './SelectedChips.css';
 import {Chip} from '@material-ui/core';
 
 export default function SelectedChips(props: any) {
