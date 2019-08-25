@@ -85,3 +85,29 @@ input.select-filter-input {
     padding: 5px 10px;
     background-color: #cccccc59;
 }
+
+iframe.iframe-modal html,
+iframe.iframe-modal body {
+    width: 100%;
+    padding: 0 !important;
+}
+
+.iframe-full-dimensions {
+    width: 100%;
+    height: 100%;
+}
+
+.iframe-full-dimensions.iframe-body {
+    overflow: hidden;
+}
+
+.iframe-body iframemodalcontent {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.iframe-body .submit-btn-container {
+    align-items: center;
+}

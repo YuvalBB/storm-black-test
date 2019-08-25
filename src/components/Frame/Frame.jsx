@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import * as ReactDOM from 'react-dom';
 import * as PropTypes from 'prop-types';
-import { FrameContextProvider } from './Context';
+import {FrameContextProvider} from './Context';
 import Content from './Content';
 
 export default class Frame extends Component {
@@ -27,8 +27,10 @@ export default class Frame extends Component {
         head: null,
         children: undefined,
         mountTarget: undefined,
-        contentDidMount: () => {},
-        contentDidUpdate: () => {},
+        contentDidMount: () => {
+        },
+        contentDidUpdate: () => {
+        },
         initialContent:
             '<!DOCTYPE html><html><head></head><body><div class="frame-root"></div></body></html>'
     };
@@ -51,7 +53,6 @@ export default class Frame extends Component {
 
     componentWillUnmount() {
         this._isMounted = false;
-
         this.node.removeEventListener('load', this.handleLoad);
     }
 
@@ -92,8 +93,8 @@ export default class Frame extends Component {
                 contentDidMount={contentDidMount}
                 contentDidUpdate={contentDidUpdate}
             >
-                <FrameContextProvider value={{ document: doc, window: win }}>
-                    <div className="frame-content">{this.props.children}</div>
+                <FrameContextProvider value={{document: doc, window: win}}>
+                    {this.props.children}
                 </FrameContextProvider>
             </Content>
         );
@@ -128,8 +129,7 @@ export default class Frame extends Component {
                 {...props}
                 ref={node => {
                     this.node = node;
-                }}
-            >
+                }}>
                 {this.renderFrameContents()}
             </iframe>
         );

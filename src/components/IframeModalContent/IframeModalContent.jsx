@@ -1,98 +1,23 @@
 import React from 'react';
-import './IframeModal.css';
+import './IframeModalContent.css';
 import Frame from "../Frame/Frame";
 import Button from "@material-ui/core/Button";
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
-import {makeStyles, useTheme} from '@material-ui/core/styles';
+import {useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Chip from '@material-ui/core/Chip';
 import {Link} from "react-router-dom";
 import uuid from 'uuid';
 import find from 'lodash.find';
 import findIndex from 'lodash.findindex';
-import $ from 'jquery';
-import SelectedChips from "../SelectedChips/SelectedChips";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap'
-    },
-    formControl: {
-        margin: theme.spacing(1),
-    },
-    chips: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        height: '100%',
-        alignItems: 'center',
-        '& div.MuiChip-root': {
-            background: '#ccc',
-            padding: '10px',
-            color: 'rgba(0, 0, 0, 0.87)',
-            border: 'none',
-            cursor: 'default',
-            height: '32px',
-            display: 'inline-flex',
-            outline: '0',
-            fontSize: '1rem',
-            boxSizing: 'border-box',
-            transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-            alignItems: 'center',
-            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-            whiteSpace: 'nowrap',
-            borderRadius: '16px',
-            verticalAlign: 'middle',
-            justifyContent: 'center',
-            textDecoration: 'none',
-            backgroundColor: '#e0e0e0',
-        }
-    },
-    chip: {
-        margin: 2,
-    },
-    noLabel: {
-        marginTop: theme.spacing(3),
-    },
-    specialSelect: {
-        height: '50px',
-        display: 'flex',
-        borderRadius: '5px',
-        border: '1px solid #c1c1c1',
-        '& div.MuiSelect-root': {
-            flex: 1
-        },
-        '& div.MuiSelect-root:hover': {
-            cursor: 'pointer'
-        }
-    },
-    flexCenter: {
-        display: 'flex',
-        justifyContent: 'center'
-    },
-    navbarLink: {
-        textDecoration: 'none'
-    },
-}));
+import SelectedChips from "../SelectedChipsNoAggregate/SelectedChips";
+import useStyles from "./IframeModalContentMakeStyles";
+import names from "./MockData";
 
 let newItemFromInput = {key: uuid.v4(), name: ''};
-let names = [
-    {key: 0, name: ''}, // Empty slot for new input from filter
-    {key: 1, name: 'Oliver Hansen'},
-    {key: 2, name: 'Van Henry'},
-    {key: 3, name: 'April Tucker'},
-    {key: 4, name: 'Ralph Hubbard'},
-    {key: 5, name: 'Omar Alexander'},
-    {key: 6, name: 'Carlos Abbott'},
-    {key: 7, name: 'Miriam Wagner'},
-    {key: 8, name: 'Bradley Wilkerson'},
-    {key: 9, name: 'Virginia Andrews'},
-    {key: 10, name: 'Kelly Snyder'},
-];
 
 function getStyles(item, selectedItems, theme) {
     return {
@@ -106,12 +31,16 @@ function getStyles(item, selectedItems, theme) {
     };
 }
 
-export default function UVModal() {
+export default function IframeModalContent() {
     const theme = useTheme();
     const classes = useStyles();
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedItems, setSelectedItems] = React.useState([]);
-    const INITIAL_CONTENT = `<!DOCTYPE html><html><head>${document.head.innerHTML}</head><body><div></div></body></html>`;
+
+    const INITIAL_CONTENT = `<!DOCTYPE html>
+    <html class="iframe-full-dimensions"><head>${document.head.innerHTML}</head>
+    <body class="iframe-full-dimensions iframe-body">
+    <IframeModalContent/></body></html>`;
 
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -178,12 +107,13 @@ export default function UVModal() {
 
     return (
         <Frame className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
-            <FormControl className={classes.formControl}>
+            <FormControl className={`${classes.formControl} select-input-container`}>
                 <InputLabel htmlFor="select-multiple-chip">Please Select Names:</InputLabel>
                 <Select multiple
                         className={classes.specialSelect}
                         value={selectedItems}
                         onChange={handleSelectChange}
+                        IconComponent={() => null}
                         input={<Input id="select-multiple-chip"/>}
                         renderValue={
                             selected => (
@@ -208,7 +138,7 @@ export default function UVModal() {
                 </Select>
             </FormControl>
 
-            <FormControl className={classes.flexCenter}>
+            <FormControl className={`${classes.formControl} submit-btn-container`}>
                 <Link to='/home' className={classes.navbarLink}>
                     <Button onClick={saveSelectedItem} variant="contained" color="primary" className={classes.button}>
                         <span>Submit</span>
