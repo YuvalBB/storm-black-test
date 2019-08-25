@@ -15,6 +15,7 @@ import uuid from 'uuid';
 import find from 'lodash.find';
 import findIndex from 'lodash.findindex';
 import $ from 'jquery';
+import SelectedChips from "../SelectedChips/SelectedChips";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -175,16 +176,6 @@ export default function UVModal() {
         e.stopPropagation();
     }
 
-    function checkTotalChipsSizes() {
-        const chipsContainer = $('.chips-container');
-        const chipsContainerWidth = chipsContainer.offsetWidth;
-        const chipElements = chipsContainer.children;
-        let chipsWidthSum = 0;
-        chipElements.forEach(chip => chipsWidthSum += chip.offsetWidth);
-
-        console.log(chipsWidthSum > chipsContainerWidth);
-    }
-
     return (
         <Frame className="modal-window iframe-modal" initialContent={INITIAL_CONTENT}>
             <FormControl className={classes.formControl}>
@@ -197,10 +188,7 @@ export default function UVModal() {
                         renderValue={
                             selected => (
                                 <div className={classes.chips + ' chips-container'}>
-                                    {selected.map(value => (
-                                        <Chip key={value.key} label={value.name}
-                                              clickable={true} className={classes.chip}
-                                              onDelete={() => deleteFromSelectedItems(value.key)}/>))}
+                                    <SelectedChips selected={selected} onDelete={deleteFromSelectedItems.bind(this)}/>
                                 </div>)}>
                     {[(
                         <div key="input-container">
