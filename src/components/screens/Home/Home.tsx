@@ -21,21 +21,30 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
+// @ts-ignore
 export default function Home() {
     const classes = useStyles();
+    const selectedItems = localStorage.getItem('selectedItems');
 
     useEffect(() => {
         document.title = 'Home';
     }, []);
     return (
         <Container maxWidth="lg">
-            <Typography variant="h4" gutterBottom>
-                Hey There!
-            </Typography>
-            <Typography variant="h5" gutterBottom>
-                Welcome to the <strong>Storm Black React Test.</strong>
-            </Typography>
+            {
+                selectedItems ? <Typography variant="h5" gutterBottom>
+                        User had subsribed to: {selectedItems}
+                    </Typography> :
+                    <div>
+                        <Typography variant="h4" gutterBottom>
+                            Hey There!
+                        </Typography>
+                        <Typography variant="h5" gutterBottom>
+                            Welcome to the <strong>Storm Black React Test.</strong>
+                        </Typography>
+                    </div>
+            }
+
             <NavLink to='/subscribe' className={classes.navLink}>
                 <Fab variant="extended" aria-label="go-to-subscribe" className={classes.fab}>
                     <ArrowForwardRoundedIcon className={classes.extendedIcon}/>

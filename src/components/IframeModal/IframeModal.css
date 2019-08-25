@@ -83,3 +83,15 @@ ul.MuiList-root.MuiMenu-list > div {
     display: flex;
     flex-direction: column;
 }
+
+input.select-filter-input {
+    height: 20px;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+#open-modal html,
+#open-modal body {
+    height: 100%;
+}
