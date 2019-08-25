@@ -1,3 +1,6 @@
+// Source: https://github.com/ryanseddon/react-frame-component/
+// Didn't use it as a package because I modified a few stuff
+
 import React, {Component} from 'react';
 import * as ReactDOM from 'react-dom';
 import * as PropTypes from 'prop-types';

@@ -1,3 +1,7 @@
+// Source: https://github.com/ryanseddon/react-frame-component/
+// Didn't use it as a package because I modified a few stuff
+
+
 import React from 'react';
 
 let doc;
