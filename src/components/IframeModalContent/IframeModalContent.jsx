@@ -31,7 +31,7 @@ export default function IframeModalContent() {
                 <Link to='/home' className={classes.navbarLink}>
                     <Button onClick={saveSelectedItem} variant="contained" color="primary" className={classes.button}>
                         <span>Submit</span>
-                        <SendRoundedIcon/>
+                        <SendRoundedIcon className={classes.rightIcon}/>
                     </Button>
                 </Link>
             </FormControl>

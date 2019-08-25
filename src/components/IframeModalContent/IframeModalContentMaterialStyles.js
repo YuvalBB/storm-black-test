@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         flex: 2
     },
+    rightIcon: {
+        marginLeft: theme.spacing(1),
+    },
     chips: {
         display: 'flex',
         flexWrap: 'wrap',
