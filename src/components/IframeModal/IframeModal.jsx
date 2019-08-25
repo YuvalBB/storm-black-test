@@ -79,6 +79,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+let newOption = {key: uuid.v4(), name: ''};
+
 let names = [
     {key: 0, name: ''}, // Empty slot for new input from filter
     {key: 1, name: 'Oliver Hansen'},
@@ -105,8 +107,6 @@ function getStyles(item, selectedItems, theme) {
     };
 }
 
-let newOption = {key: uuid.v4(), name: ''};
-
 export default function UVModal() {
     const theme = useTheme();
     const classes = useStyles();
@@ -119,6 +119,10 @@ export default function UVModal() {
 
     function handleChange(e) {
         setSelectedItems(e.target.value);
+    }
+
+    function addNewOption() {
+
     }
 
     function saveSelectedItem() {
@@ -137,7 +141,14 @@ export default function UVModal() {
         }
     }
 
-    function deleteFromSelected(key) {
+    function addToSelectedItems(key) {
+        const index = names[findIndexByKey(names, key)];
+        selectedItems.push(index);
+        setSelectedItems(selectedItems);
+        forceUpdate();
+    }
+
+    function deleteFromSelectedItems(key) {
         const index = findIndexByKey(selectedItems, key);
         selectedItems.splice(index, 1);
         setSelectedItems(selectedItems);
@@ -173,7 +184,7 @@ export default function UVModal() {
                                             <Chip key={value.key} label={value.name} clickable={true}
                                                   className={classes.chip}
                                                   onDelete={() => {
-                                                      deleteFromSelected(value.key);
+                                                      deleteFromSelectedItems(value.key);
                                                   }}/>))
                                     }
                                 </div>
@@ -197,11 +208,7 @@ export default function UVModal() {
                                     }}
                                     onKeyDown={e => {
                                         if (e.keyCode === 13) {
-                                            const newTemp = {name: e.target.value, key: uuid.v4()};
-                                            selectedItems.push(newTemp);
-                                            setSelectedItems(selectedItems);
-                                            names.unshift(newTemp);
-                                            forceUpdate();
+                                            addToSelectedItems(newOption.key);
                                         }
                                         e.stopPropagation();
                                     }}
