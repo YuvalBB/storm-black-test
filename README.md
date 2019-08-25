@@ -18,7 +18,9 @@ Known Issues [== things I didn't have time to deal with]:
     - Messy styling / stylesheets
     - Could be more pretty ;)
 ```
-        - Therefore, used [this](https://github.com/YuvalBB/storm-black-test/blob/master/src/components/SelectedChipsNoAggregate/SelectedChips.tsx) instead, with no aggregation.
+Therefore, used [this](https://github.com/YuvalBB/storm-black-test/blob/master/src/components/SelectedChipsNoAggregate/SelectedChips.tsx) instead, with no aggregation.
+This site was built using [GitHub Pages](https://pages.github.com/).
+
 
 by Yuval Babayoff
 contact: (yuvalbabayoff@gmail.com)
