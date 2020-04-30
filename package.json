@@ -16,7 +16,7 @@
     "@types/react-dom": "16.9.0",
     "@types/react-router-dom": "^4.3.5",
     "immutable": "^4.0.0-rc.12",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jss": "latest",
     "lodash.find": "^4.6.0",
     "lodash.findindex": "^4.6.0",
